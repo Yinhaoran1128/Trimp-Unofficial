@@ -18,6 +18,80 @@
 		<http://www.gnu.org/licenses/>. */
 
 //Spoilers ahead, proceed with caution
+
+//脆皮自定义倍速 Author:DreamNya
+
+//===========Trimp-Unofficial-SpeedUp  Start
+const _SpeedUp = +(localStorage.getItem('SpeedUp') || 1);
+Object.defineProperty(globalThis, 'SpeedUp', {
+	get: () => _SpeedUp,
+	set: (newValue) => {
+		if (newValue > 0) {
+			localStorage.setItem('SpeedUp', newValue)
+			save(false, true)
+			location.reload()
+		} else {
+			throw new Error('仅限正数')
+		}
+	}
+})
+
+//WebWorker全部抄自 https://greasyfork.org/scripts/456280/code
+globalThis.WebWorker = {};
+WebWorker.init = function () {
+	this.setInterval = function (callback, delay) {
+		let callbackList = this['intervalList' + delay]
+		if (callbackList == void 0) {
+			callbackList = new Set()
+			let workerURL = URL.createObjectURL(new Blob([`setInterval(()=>{postMessage('')},${delay})`]))
+			this.intervalWorker = new Worker(workerURL)
+			this.intervalWorker.onmessage = () => {
+				callbackList.forEach(i => i())
+			}
+			URL.revokeObjectURL(workerURL) //垃圾回收
+			this['intervalList' + delay] = callbackList
+		}
+		callbackList.add(callback)
+	}
+	this.setTimeout = function (callback, delay) {
+		let callbackList = this['timeoutList' + delay]
+		if (callbackList == void 0) {
+			callbackList = new Set()
+			let workerURL = URL.createObjectURL(new Blob([`(function Timeout(){postMessage('');setTimeout(Timeout,${delay})})()`]))
+			this.timeoutWorker = new Worker(workerURL)
+			this.timeoutWorker.onmessage = () => {
+				callbackList.forEach(i => i())
+			}
+			URL.revokeObjectURL(workerURL) //垃圾回收
+			this['timeoutList' + delay] = callbackList
+		}
+		callbackList.add(callback)
+	}
+
+	this.clearInterval = function (callback, delay) {
+		let callbackList = this['intervalList' + delay]
+		if (!callbackList) return
+		callbackList.delete(callback)
+		if (callbackList.size == 0) {
+			this.intervalWorker.terminate()
+			this['intervalList' + delay] = void 0
+		}
+	}
+
+	this.clearTimeout = function (callback, delay) {
+		let callbackList = this['timeoutList' + delay]
+		if (!callbackList) return
+		callbackList.delete(callback)
+		if (callbackList.size == 0) {
+			this.intervalWorker.terminate()
+			this['timeoutList' + delay] = void 0
+		}
+	}
+};
+WebWorker.init();
+
+//===========Trimp-Unofficial-SpeedUp End
+
 function newGame () {
 var toReturn = {
 	global: {
@@ -6433,7 +6507,7 @@ var toReturn = {
 			value: function (useTemp) {
 				var timeThisPortal = new Date().getTime() - game.global.portalTime;
 				if (timeThisPortal < 1) return 0;
-				timeThisPortal /= 3600000;
+				timeThisPortal /= (3600000 / SpeedUp); //Trimp-Unofficial-SpeedUp 骨头神龛速度
 				var resToUse;
 				if (game.global.universe == 2){
 					resToUse = (useTemp) ? game.global.tempHighRadon : game.resources.radon.owned;
@@ -8193,7 +8267,7 @@ var toReturn = {
 	badGuyDeathTexts: ["击杀了", "杀死了", "毁灭了", "消灭了", "清算了", "蒸发了", "摧毁了", "破坏了", "击毁了", "抹消了"],
 
 	settings: {
-		speed: 10,
+		speed: 10 / SpeedUp, //Trimp-Unofficial-SpeedUp 游戏速度
 		speedTemp: 0,
 		slowdown: false,
                 ewma_alpha: 0.05,
@@ -8255,7 +8329,7 @@ var toReturn = {
 				}
 				return amt;
 			},
-			potency: 0.0085
+			potency: 0.0085 * SpeedUp //Trimp-Unofficial-SpeedUp 繁殖速度
 		},
 		science: {
 			owned: 0,

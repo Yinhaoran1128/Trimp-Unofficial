@@ -591,7 +591,7 @@ function load(saveString, autoLoad, fromPf) {
 			if (game.global.roboTrimpLevel > 8)
 				game.global.roboTrimpLevel = 8;
 		}
-		game.resources.trimps.potency = 0.0085;
+		game.resources.trimps.potency = 0.0085 * SpeedUp; //Trimp-Unofficial-SpeedUp 脆皮繁殖速度
 		if (game.global.spentEssence > 0){
 			for (var item in game.talents){
 				game.talents[item].purchased = false;
@@ -18964,26 +18964,17 @@ function runEverySecond(makeUp){
 }
 
 function getGameTime(){
-	return game.global.start + game.global.time;
+	return game.global.start + game.global.time * SpeedUp;//Trimp-Unofficial-SpeedUp 本轮时间
 }
 
 function gameTimeout() {
+	//Trimp-Unofficial-SpeedUp 删除无用代码，固定tick时间
 	if (game.options.menu.pauseGame.enabled) {
-		setTimeout(gameTimeout, 100);
 		return;
 	}
 	var now = new Date().getTime();
-	//4432
-	if ((now - game.global.start - game.global.time) > 3600000){	
-		checkOfflineProgress();
-		game.global.start = now;
-		game.global.time = 0;
-		game.global.lastOnline = now;
-		setTimeout(gameTimeout, (1000 / game.settings.speed));
-		return;
-	}
 	game.global.lastOnline = now;
-    var tick = 1000 / game.settings.speed;
+    var tick = 100;
     game.global.time += tick;
 	var dif = (now - game.global.start) - game.global.time;
     while (dif >= tick) {
@@ -18994,7 +18985,6 @@ function gameTimeout() {
 	}
     runGameLoop(null, now);
     updateLabels();
-    setTimeout(gameTimeout, (tick - dif));
 }
 
 /**
@@ -19015,7 +19005,7 @@ function runGameLoop(makeUp, now) {
 }
 function updatePortalTimer(justGetTime) {
 	if (game.global.portalTime < 0) return;
-	var timeSince = getGameTime() - game.global.portalTime;
+	var timeSince = (game.global.start + game.global.time - game.global.portalTime) * SpeedUp; //Trimp-Unofficial-SpeedUp 本轮时间
 	timeSince /= 1000;
 	var timeString = formatSecondsAsClock(timeSince);
 	if (justGetTime) return timeString;
@@ -19360,7 +19350,8 @@ displayPerksBtn();
 
 autoSaveTimeout = setTimeout(autoSave, 60000);
 costUpdatesTimeout();
-setTimeout(gameTimeout, (1000 / game.settings.speed));
+//setTimeout(gameTimeout, (1000 / game.settings.speed));
+WebWorker.setInterval(gameTimeout, 100) //Trimp-Unofficial-SpeedUp 利用WebWorker代替setTimeout
 game.options.menu.darkTheme.onToggle();
 
 if (usingScreenReader) screenReaderSummary();
