@@ -909,7 +909,7 @@ var toReturn = {
 				var hours = 4;
 				hours -= (Math.floor(this.owned / 5) * 0.5);
 				if (hoursOnly) return hours;
-				return (hours * 3.6e6); // to ms
+				return (hours * 3.6e6 / SpeedUp); // to ms //Trimp-Unofficial-SpeedUp 骨头神龛充能速度
 			},
 			btnTooltip: function(){
 				var text = "";
@@ -6507,7 +6507,7 @@ var toReturn = {
 			value: function (useTemp) {
 				var timeThisPortal = new Date().getTime() - game.global.portalTime;
 				if (timeThisPortal < 1) return 0;
-				timeThisPortal /= (3600000 / SpeedUp); //Trimp-Unofficial-SpeedUp 骨头神龛速度
+				timeThisPortal /= (3600000 / SpeedUp); //Trimp-Unofficial-SpeedUp 氦每小时
 				var resToUse;
 				if (game.global.universe == 2){
 					resToUse = (useTemp) ? game.global.tempHighRadon : game.resources.radon.owned;
