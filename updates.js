@@ -2387,7 +2387,7 @@ function countStackedVoidMaps(){
 function getTrimpPs() {
 	if (game.global.challengeActive == "Trapper" || game.global.challengeActive == "Trappapalooza") return;
 	var trimps = game.resources.trimps;
-	var base = 0.0085;
+	var base = 0.0085 * SpeedUp; //Trimp-Unofficial-SpeedUp 繁殖速度
 	var textString =  "<table class='bdTable table table-striped'><tbody>";
 	//Add base
 	textString += "<tr><td class='bdTitle'>Base</td><td class='bdPercent'></td><td class='bdNumber'>" + base + "</td></tr>";
