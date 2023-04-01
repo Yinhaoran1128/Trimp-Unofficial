@@ -9537,7 +9537,7 @@ function buildGrid() {
 	canSkeletimp = false;
 	var skeleMin = 2700000;
 	if (game.talents.skeletimp2.purchased) skeleMin -= 600000
-	if ((new Date().getTime() - game.global.lastSkeletimp) >= skeleMin) canSkeletimp = true;
+	if ((new Date().getTime() - game.global.lastSkeletimp) >= skeleMin / SpeedUp) canSkeletimp = true; //Trimp-Unofficial-SpeedUp 骨头间隔
 	var corrupteds = [];
 	for (var w = 0; w < 100; w++){
 		corrupteds.push("");
@@ -16816,7 +16816,7 @@ function givePresimptLoot(){
 	var eligible = ["food", "food", "wood", "wood", "metal",  "metal", "metal", "metal", "metal", "metal", "metal"];
 	var boneTime = 30;
 	boneTime *= 60000;
-	if (new Date().getTime() > (game.global.lastBonePresimpt + boneTime))
+	if (new Date().getTime() > (game.global.lastBonePresimpt + boneTime) / SpeedUp) //Trimp-Unofficial-SpeedUp 骨头间隔
 		eligible.push("bones");
 	var success = [
 		"您的手指又冷又麻，但还是可以用来打开小礼！您在里面发现了",
@@ -17791,7 +17791,7 @@ var Fluffy = {
 		var possibilities = [];
 		var timeSeed = Math.floor(new Date().getTime() / 1000 / 30);
 		var name = this.getName();
-		if (new Date().getTime() - this.lastPat < 15000){
+		if (new Date().getTime() - this.lastPat < 15000 / SpeedUp){ //Trimp-Unofficial-SpeedUp 绒绒
 			var stat = (game.global.universe == 1) ? game.stats.fluffyPats.valueTotal : game.stats.scruffyPats.valueTotal;
 			var extra = "您已经拍了" + stat + "次" + name + "。";
 			possibilities = [name + "发出了非常愉悦的咕噜声。" + extra, name + "希望您再挠挠耳朵后面。" + extra, name + "很喜欢您的手法！" + extra, name + "觉得您是最好的。" + extra, name + "最爱拍头了！" + extra, name + "看起来非常高兴。" + extra];
