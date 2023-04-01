@@ -2370,7 +2370,7 @@ var TDFloatingText = (function(floatingCombatText) {
         var i;
         for(i = 0; i < elements.length; i++) {
             var element = elements[i];
-            var speed = element.speed * (frameTime / 20);
+            var speed = element.speed * (frameTime / 20) * SpeedUp; //Trimp-Unofficial-SpeedUp 尖塔浮动文本速度
            
             element.distanceLeft -= Math.abs(speed);
             if(element.distanceLeft <= 0) {

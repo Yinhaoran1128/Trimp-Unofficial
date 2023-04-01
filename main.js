@@ -18877,6 +18877,10 @@ function gameLoop(makeUp, now) {
     battleCoordinator(makeUp);
 	if (game.global.titimpLeft) game.global.titimpLeft -= 0.1;
 	loops++;
+	//Trimp-Unofficial-SpeedUp 移动尖塔循环间隔
+	if (playerSpire.initialized && (SpeedUp >= 10 || (loops % (10 / SpeedUp) == 0))) {
+		playerSpire.moveEnemies(makeUp);
+	}
 	//every 300ms
 	if (loops % 3 == 0){
 		autoBattle.update();
@@ -18957,8 +18961,7 @@ function runEverySecond(makeUp){
 	if (game.global.autoEquipUnlocked) buyAutoEquip();
 	Fluffy.handleBox();
 	updatePortalTimer();
-	if (playerSpire.initialized)
-		playerSpire.moveEnemies(makeUp);
+	//Trimp-Unofficial-SpeedUp 移动尖塔循环间隔
 	trackAchievement();
 	holidayObj.checkAll();
 	if (game.global.tutorialActive) tutorial.check();
