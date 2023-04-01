@@ -9334,7 +9334,7 @@ function getGeneratorTickTime(){
 	var baseTick = 60;
 	var zoneMult = (game.talents.quickGen.purchased) ? 1.03 : 1.02;
 	var tickTime = Math.ceil(1 / Math.pow(zoneMult, Math.floor((game.global.world - mutations.Magma.start()) / 3)) * baseTick * 10) / 10;
-	return (tickTime < 5) ? 5 : tickTime;
+	return ((tickTime < 5) ? 5 : tickTime) / SpeedUp; //Trimp-Unofficial-SpeedUp 维度发生器计时
 }
 
 function canGeneratorTick(){
