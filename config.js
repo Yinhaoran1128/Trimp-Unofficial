@@ -908,6 +908,7 @@ var toReturn = {
 			chargeTime: function(hoursOnly){
 				var hours = 4;
 				hours -= (Math.floor(this.owned / 5) * 0.5);
+				hours /= 1000;
 				if (hoursOnly) return hours;
 				return (hours * 3.6e6 / SpeedUp); // to ms //Trimp-Unofficial-SpeedUp 骨头神龛充能速度
 			},
